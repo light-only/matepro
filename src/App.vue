@@ -1,12 +1,14 @@
-<script setup lang="ts">
-import BasicLayout from './layout/BasicLayout.vue'
-</script>
-
 <template>
-  <div>
-  <BasicLayout  />
-  </div>
+  <BasicLayout/>
 </template>
+
+<script setup lang="ts">
+import {ref, watch} from 'vue'
+import BasicLayout from './layout/BasicLayout.vue'
+
+
+
+</script>
 
 <style scoped>
 </style>
