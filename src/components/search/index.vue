@@ -11,7 +11,7 @@
 
   <van-divider content-position="left">已选标签</van-divider>
   <div class="tag-flex">
-    <van-tag style="margin: 5px"  v-for="(item,index) in activeIds" :key="index" closeable size="large" type="primary" @close="close(index)">
+    <van-tag style="margin: 10px"  v-for="(item,index) in activeIds" :key="index" closeable size="large" type="primary" @close="close(index)">
       {{ item }}
     </van-tag>
   </div>
@@ -24,7 +24,7 @@
       :items="realTags"
   />
   <div style="margin: 20px">
-    <van-button style="width: 100%;" type="primary">查询</van-button>
+    <van-button style="width: 100%;" type="primary" @click="searchUser">查询</van-button>
   </div>
 
 
@@ -32,6 +32,7 @@
 
 <script setup lang="ts">
 import {onMounted, ref} from 'vue';
+import router from "../../router";
 
 const value = ref('');
 const onSearch = (val) => {
@@ -88,12 +89,23 @@ const originTag = [
 const close = (index) => {
   activeIds.value = activeIds.value.filter((item,idx)=> idx !== index);
 };
+
+/**
+ * 搜索用户
+ */
+const searchUser = () =>{
+  router.push({
+    path:'/resultList',
+    query:{
+      tags:activeIds.value
+    }
+  });
+}
 </script>
 
 <style scoped>
 .tag-flex {
-  padding: 0 10px;
-  width: 100%;
+  width: 100vw;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;

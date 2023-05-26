@@ -12,8 +12,8 @@ export default defineConfig({
     })
   ],
   server:{
-    port:81,
+    port:3000,
     host:true,
-    open:false
-  }
+    open:false,
+  },
 })
