@@ -29,8 +29,12 @@
 
 <script setup lang="ts">
 import {onMounted, ref} from 'vue'
-import router from "../router";
 import {useRoute} from "vue-router";
+import {updateUser} from "../api";
+import {getLoginUser} from "../services/user";
+import {showFailToast, showSuccessToast} from "vant";
+import router from "../router";
+import {setCurrentUserState} from "../states/user";
 const route = useRoute();
 onMounted(()=>{
   if(editUser.value.editKey === 'avatarUrl'){
@@ -43,8 +47,20 @@ const editUser = ref({
   editValue:route.query.editValue,
   editName:route.query.name
 });
-const onSubmit = (values) => {
-  console.log('submit', values);
+/**
+ * 提交表单
+ * @param values 表单项数据
+ */
+const onSubmit = async (values) => {
+  const currentUser = await getLoginUser();
+  updateUser({id:currentUser.id,[editUser.value.editKey]:editUser.value.editValue}).then(res=>{
+    if(res.code === 0){
+      showSuccessToast('修改成功');
+      router.replace('/user');
+    }else {
+      showFailToast('修改失败，请重试');
+    }
+  })
 };
 </script>
 

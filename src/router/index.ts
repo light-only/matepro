@@ -8,6 +8,7 @@ import User from '../pages/User.vue'
 import Search from '../components/search/index.vue'
 import Edit from '../pages/Edit.vue'
 import UserResult from '../pages/UserResult.vue'
+import UserLogin from '../pages/UserLogin.vue'
 
 // 2. 定义一些路由
 // 每个路由都需要映射到一个组件。
@@ -18,7 +19,8 @@ const routes = [
     {path:'/user',component: User},
     {path:'/search',component: Search},
     {path:'/edit',component: Edit},
-    {path:'/resultList',component: UserResult}
+    {path:'/resultList',component: UserResult},
+    {path:'/login',component: UserLogin}
 ]
 
 // 3. 创建路由实例并传递 `routes` 配置

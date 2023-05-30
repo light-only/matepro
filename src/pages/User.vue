@@ -21,7 +21,7 @@
     <van-cell title="电话" :value="user.phone" is-link @click="toEdit('phone','电话',user.phone)"/>
     <van-cell title="邮箱" :value="user.email" is-link @click="toEdit('email','邮箱',user.email)"/>
     <van-cell title="星球编号" :value="user.planetCode" />
-    <van-cell title="注册时间" :value="user.createTime" />
+    <van-cell title="注册时间" :value="moment(user.createTime).format('YYYY-MM-DD HH:mm')" />
   </van-cell-group>
 
 </template>
@@ -29,22 +29,23 @@
 <script setup lang="ts">
 
 import router from "../router";
+import {onMounted, ref} from "vue";
+import moment from 'moment'
+import {useStore} from "../store";
+import {showFailToast} from "vant";
+import {getLoginUser} from "../services/user";
+const state = useStore();
 
-const user = {
-  id:1,
-  userAccount:'zhangsan',
-  userName:'张三',
-  avatarUrl:'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg',
-  gender:0,
-  phone:'13949523280',
-  email:'1480418586@qq.com',
-  userStatus:1,
-  userRole:1,
-  planetCode:1,
-  tags:'java',
-  createTime:'2023-09-08'
-
-};
+const user = ref({});
+onMounted(async ()=>{
+  user.value = await getLoginUser();
+})
+/**
+ * 编辑用户信息
+ * @param editKey
+ * @param name
+ * @param editValue
+ */
 const toEdit = (editKey:string,name:string,editValue:string,)=>{
   router.push({
     path:'/edit',
@@ -52,7 +53,6 @@ const toEdit = (editKey:string,name:string,editValue:string,)=>{
       editKey,
       name,
       editValue,
-
     }
   })
 }

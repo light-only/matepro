@@ -3,6 +3,8 @@ const myAxios = axios.create({
     baseURL: 'http://localhost:8082/api'
 } as any);
 
+myAxios.defaults.withCredentials = true;//允许携带cookie
+
 // 添加请求拦截器
 myAxios.interceptors.request.use(function (config) {
     console.log('我要发送请求了')
