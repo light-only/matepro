@@ -31,10 +31,7 @@
 import router from "../router";
 import {onMounted, ref} from "vue";
 import moment from 'moment'
-import {useStore} from "../store";
-import {showFailToast} from "vant";
 import {getLoginUser} from "../services/user";
-const state = useStore();
 
 const user = ref({});
 onMounted(async ()=>{

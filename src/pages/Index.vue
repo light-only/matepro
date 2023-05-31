@@ -1,13 +1,23 @@
 <template>
-  index文件
+  <user-card :userList="userList"></user-card>
 </template>
 
 <script setup lang="ts">
-import {useStore} from "../store";
+import {onMounted, ref} from "vue";
+import {getRecommendUser} from "../api";
+import {showFailToast} from "vant";
+const userList = ref([]);
 
-const state = useStore();
+onMounted(()=>{
+  getRecommendUser().then(res=>{
+    if(res.code === 0){
+      userList.value = res.data?.records;
+    }else {
+      showFailToast('请求失败，请重试！');
+    }
+  })
+})
 
-console.log(state.user,'state++')
 </script>
 
 <style>

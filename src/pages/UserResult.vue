@@ -1,18 +1,5 @@
 <template>
-  <van-card
-      v-for="item in userList"
-      :key="item?.id"
-      :desc="item?.profile"
-      :title="item?.userName"
-      :thumb="item?.avatarUrl"
-  >
-    <template #tags >
-      <van-tag v-for="(it,index) in JSON.parse(item?.tags)" :key="index" plain type="primary">{{it}}</van-tag>
-    </template>
-    <template #footer>
-      <van-button size="mini">联系我</van-button>
-    </template>
-  </van-card>
+  <user-card :userList="userList"></user-card>
 
 </template>
 
@@ -21,7 +8,6 @@
 import {useRoute} from "vue-router";
 import {onMounted, ref} from "vue";
 import {getSearchUserByTags} from "../api";
-import qs from 'qs';
 import {showFailToast} from "vant";
 const route = useRoute();
 const userList = ref([]);
