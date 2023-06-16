@@ -5,23 +5,45 @@
                 :rules="[{ required: true, message: '队伍名不能为空' }]" />
             <van-field v-model="addTeamData.description" type="textarea" name="description" label="队伍描述" placeholder="请输入队伍描述" />
             <van-field
-            is-link
-            readonly
-            name="datetimePicker"
-            label="过期时间"
-            :placeholder="addTeamData.expireTime ?? '点击选择过期时间'"
-            @click="showPicker = true"
-        />
-        <van-popup v-model:show="showPicker" position="bottom">
-          <van-datetime-picker
-              v-model="addTeamData.expireTime"
-              @confirm="showPicker = false"
-              type="datetime"
-              title="请选择过期时间"
-              :min-date="minDate"
-          />
-          </van-popup>
-          </van-cell-group>
+                v-model="addTeamData.expireTime"
+                is-link
+                readonly
+                name="expireTime"
+                label="时间选择"
+                placeholder="点击选择时间"
+                @click="showPicker = true"
+
+            />
+            <van-popup v-model:show="showPicker" position="bottom">
+                <van-date-picker @confirm="onConfirm" :min-date="minDate" @cancel="showPicker = false" />
+            </van-popup>
+
+            <van-field name="maxNum" label="最大人数">
+                <template #input>
+                    <van-stepper v-model="addTeamData.maxNum" min="3"/>
+                </template>
+            </van-field>
+
+            <van-field name="status" label="队伍状态">
+                <template #input>
+                    <van-radio-group v-model="addTeamData.status" direction="horizontal">
+                        <van-radio name="0">公开</van-radio>
+                        <van-radio name="1">私有</van-radio>
+                        <van-radio name="2">加密</van-radio>
+                    </van-radio-group>
+                </template>
+            </van-field>
+            <van-field
+                v-if="addTeamData.status == 2"
+                name="password"
+                label="密码"
+                v-model="addTeamData.password"
+                type="password"
+                placeholder="请输入密码"
+                :rules="[{required: true,message:'请填写密码'}]"
+            />
+
+        </van-cell-group>
         <div style="margin: 16px;">
             <van-button round block type="primary" native-type="submit">
                 提交
@@ -29,9 +51,13 @@
         </div>
     </van-form>
 </template>
-  
+
 <script setup lang="ts">
 import {ref} from 'vue'
+import {DatePicker, showFailToast, showSuccessToast} from 'vant';
+import {createTeam} from "@/api/team";
+import router from "../router";
+
 const initFormData = {
     "name":"",
     "description":"",
@@ -46,10 +72,32 @@ const minDate = new Date();
 //需要用户填写的表单数据
 const addTeamData = ref({...initFormData});
 const onSubmit = (values:any) => {
-    console.log('submit', values);
+    //处理参数，转换队伍状态为数字
+    const postData = {
+        ...addTeamData.value,
+        status:Number(addTeamData.value.status)
+    }
+    //创建队伍接口
+    createTeam(postData).then(res=>{
+        if(res.code ===0){
+            showSuccessToast('创建成功');
+            router.push('/team');
+        }else {
+            showFailToast(res.message);
+        }
+    })
+};
+/**
+ * @description:处理选择器时间格式
+ * @param selectedValues
+ */
+const onConfirm = ({ selectedValues }) => {
+    addTeamData.value.expireTime = selectedValues.join('-');
+    showPicker.value = false;
 };
 
 </script>
-  
-<style></style>
-  
+
+<style>
+
+</style>
