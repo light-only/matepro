@@ -22,6 +22,7 @@
             </template>
             <template #footer>
                 <van-button size="mini" @click="joinTeam(item)">加入队伍</van-button>
+                <van-button size="mini" @click="doUpdateTeam(item)">更新队伍</van-button>
             </template>
         </van-card>
     </div>
@@ -32,7 +33,10 @@
 import {defineProps} from "vue";
 import {teamStatusEnum} from "@/constants/team";
 import moment from 'moment'
-import {joinTeams} from "@/api/team";
+import {joinTeams,updateTeam} from "@/api/team";
+import { showFailToast, showSuccessToast } from "vant";
+import { useRouter } from "vue-router";
+const router = useRouter();
 const props = defineProps({
     teamList:{
         type:Array,
@@ -42,7 +46,7 @@ const props = defineProps({
 /**
  * @description:加入队伍
  */
-const joinTeam = (val)=>{
+const joinTeam = (val:any)=>{
     const {password,id,status} = val;
     let  postData;
     if(status === 3){
@@ -56,8 +60,20 @@ const joinTeam = (val)=>{
         }
     }
     joinTeams(postData).then(res=>{
-        console.log(res,'res----')
+        if(res.code === 0){
+            showSuccessToast("加入成功");
+        }else {
+            showFailToast(res.description);
+        }
     })
+}
+/**
+ * @description:更新队伍
+ * @param val 
+ */
+const doUpdateTeam = (val:any)=>{
+    console.log(val,'val0000');
+    router.push({path:'/team/update',query:{id:val.id}});
 }
 </script>
 

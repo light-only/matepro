@@ -10,6 +10,7 @@ import Edit from '../pages/Edit.vue'
 import UserResult from '../pages/UserResult.vue'
 import UserLogin from '../pages/UserLogin.vue'
 import TeamAddPage from '../pages/TeamAddPage.vue'
+import TeamUpdatePage from '@/pages/TeamUpdatePage.vue'
 
 // 2. 定义一些路由
 // 每个路由都需要映射到一个组件。
@@ -22,7 +23,8 @@ const routes = [
     {path:'/edit',component: Edit},
     {path:'/resultList',component: UserResult},
     {path:'/login',component: UserLogin},
-    {path:'/team/add',component:TeamAddPage}
+    {path:'/team/add',component:TeamAddPage},
+    {path:'/team/update',component:TeamUpdatePage}
 ]
 
 // 3. 创建路由实例并传递 `routes` 配置

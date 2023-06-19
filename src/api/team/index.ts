@@ -1,3 +1,4 @@
+
 import myAxios from "../../plugins/myAxios";
 
 
@@ -25,4 +26,22 @@ export const getTeamList = (params)=>{
  */
 export const joinTeams = (data)=>{
     return myAxios.post('/team/join',data)
+}
+
+/**
+ * @description:更新队伍数据
+ * @param data 队伍表单数据
+ * @returns 
+ */
+export const updateTeam = (data:any)=>{
+    return myAxios.post("team/update",data)
+}
+
+/**
+ * @description:获取队伍详情
+ * @param id 
+ * @returns 
+ */
+export const getTeamDetail = (id:any)=>{
+    return myAxios.get('/team/get?id=' + id)
 }
