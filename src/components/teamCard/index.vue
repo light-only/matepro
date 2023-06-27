@@ -21,8 +21,10 @@
                 </div>
             </template>
             <template #footer>
-                <van-button size="mini" @click="joinTeam(item)">加入队伍</van-button>
-                <van-button size="mini" @click="doUpdateTeam(item)">更新队伍</van-button>
+                <van-button size="mini" v-if="currentUser?.id !== item.userId" @click="joinTeam(item)">加入队伍</van-button>
+                <van-button v-if="currentUser?.id === item.userId" size="mini" @click="doUpdateTeam(item)">更新队伍</van-button>
+                <van-button  size="mini" @click="doQuitTeam(item)">退出队伍</van-button>
+                <van-button v-if="currentUser?.id === item.userId" size="mini" @click="doCloseTeam(item)">解散队伍</van-button>
             </template>
         </van-card>
     </div>
@@ -30,19 +32,26 @@
 
 <script setup lang="ts">
 
-import {defineProps} from "vue";
+import {defineEmits, defineProps, onMounted, ref} from "vue";
 import {teamStatusEnum} from "@/constants/team";
 import moment from 'moment'
 import {joinTeams,updateTeam} from "@/api/team";
 import { showFailToast, showSuccessToast } from "vant";
 import { useRouter } from "vue-router";
+import {getLoginUser} from "../../services/user";
+import {quitTeam} from "../../api/team";
 const router = useRouter();
+const currentUser = ref();
+const emit = defineEmits(['refreshList']);
 const props = defineProps({
     teamList:{
         type:Array,
         default:[]
     }
 });
+onMounted(async ()=>{
+    currentUser.value = await  getLoginUser();
+})
 /**
  * @description:加入队伍
  */
@@ -63,17 +72,39 @@ const joinTeam = (val:any)=>{
         if(res.code === 0){
             showSuccessToast("加入成功");
         }else {
-            showFailToast(res.description);
+            showFailToast(res.description?res.description:res.message);
         }
     })
 }
 /**
  * @description:更新队伍
- * @param val 
+ * @param val
  */
 const doUpdateTeam = (val:any)=>{
     console.log(val,'val0000');
     router.push({path:'/team/update',query:{id:val.id}});
+}
+/**
+ * @description:退出队伍
+ * @param val
+ */
+const doQuitTeam = (val:any)=>{
+    //调用退出接口
+    quitTeam(val.id).then(res=>{
+        if(res.code === 0){
+            showSuccessToast("退出成功");
+            emit('refreshList');
+        }else{
+            showFailToast("退出失败");
+        }
+    })
+}
+/**
+ * @description:解散队伍
+ * @param val
+ */
+const doCloseTeam = (val:any)=>{
+
 }
 </script>
 

@@ -1,17 +1,14 @@
 <template>
     <form action="/">
-      <van-search
-        v-model="value"
-        show-action
-        placeholder="请输入搜索关键词"
-        @search="onSearch"
-        @cancel="onCancel"
-      />
-</form>
-    <div class="add-team">
-        <van-button type="primary" @click="toAddTeam" style="width: 100%">主要按钮</van-button>
-    </div>
-    <team-card v-if="teamList.length>0" @refreshList="getList" :teamList="teamList"></team-card>
+        <van-search
+            v-model="value"
+            show-action
+            placeholder="请输入搜索关键词"
+            @search="onSearch"
+            @cancel="onCancel"
+        />
+    </form>
+    <team-card v-if="teamList.length>0" :teamList="teamList"></team-card>
     <van-empty v-else description="暂无数据" />
 </template>
 
@@ -20,10 +17,13 @@ import {ref} from 'vue';
 import router from '../router';
 import teamCard from '@/components/teamCard/index.vue'
 import {onMounted} from "vue";
-import {getTeamList} from "../api/team";
+import {getTeamCreate} from "../api/team";
 import {showFailToast,showToast} from "vant";
 import { reactive } from 'vue';
+import {useStore} from "../store";
+import {getLoginUser} from "../services/user";
 
+const store = useStore();
 const teamList = ref([]);
 const value = ref('');
 
@@ -31,7 +31,8 @@ const value = ref('');
 const queryParams = reactive({
     pageNum:1,
     pageSize:10,
-    name:undefined
+    name:undefined,
+    userId:undefined
 });
 
 /**
@@ -56,7 +57,7 @@ const onCancel = () => {
  * 点击跳转新增队伍页面
  */
 const toAddTeam = ()=>{
-  router.push('/team/add');
+    router.push('/team/add');
 }
 onMounted(()=>{
     getList();
@@ -67,9 +68,9 @@ onMounted(()=>{
  */
 const getList = ()=>{
     //获取队伍列表接口数据
-    getTeamList(queryParams).then(res=>{
+    getTeamCreate(queryParams).then(res=>{
         if(res.code === 0){
-            teamList.value = res.data.records;
+            teamList.value = res.data;
         }else {
             showFailToast('请求失败，请重试')
         }
@@ -78,7 +79,4 @@ const getList = ()=>{
 </script>
 
 <style scoped>
-    .add-team {
-        margin: 20px;
-    }
 </style>

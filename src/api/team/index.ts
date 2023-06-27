@@ -31,7 +31,7 @@ export const joinTeams = (data)=>{
 /**
  * @description:更新队伍数据
  * @param data 队伍表单数据
- * @returns 
+ * @returns
  */
 export const updateTeam = (data:any)=>{
     return myAxios.post("team/update",data)
@@ -39,9 +39,37 @@ export const updateTeam = (data:any)=>{
 
 /**
  * @description:获取队伍详情
- * @param id 
- * @returns 
+ * @param id
+ * @returns
  */
 export const getTeamDetail = (id:any)=>{
     return myAxios.get('/team/get?id=' + id)
+}
+
+/**
+ * @description:获取我创建的队伍
+ * @param params
+ */
+export const getTeamCreate = (params)=>{
+    return myAxios.get('/team/list/my/create',{
+        params
+    });
+}
+
+/**
+ * @description:获取我加入的队伍
+ * @param params
+ */
+export const getTeamJoin = (params)=>{
+    return myAxios.get('/team/list/my/join',{
+        params
+    });
+}
+
+/**
+ * @description:退出队伍
+ * @param id
+ */
+export const quitTeam = (id)=>{
+    return myAxios.post('/team/quit?teamId=' + id);
 }
