@@ -21,9 +21,9 @@
                 </div>
             </template>
             <template #footer>
-                <van-button size="mini" v-if="currentUser?.id !== item.userId" @click="joinTeam(item)">加入队伍</van-button>
+                <van-button size="mini" v-if="currentUser?.id !== item.userId && !item.hasJoin" @click="joinTeam(item)">加入队伍</van-button>
                 <van-button v-if="currentUser?.id === item.userId" size="mini" @click="doUpdateTeam(item)">更新队伍</van-button>
-                <van-button  size="mini" @click="doQuitTeam(item)">退出队伍</van-button>
+                <van-button v-if="item.userId !== currentUser?.id && item.hasJoin == true"  size="mini" @click="doQuitTeam(item)">退出队伍</van-button>
                 <van-button v-if="currentUser?.id === item.userId" size="mini" @click="doCloseTeam(item)">解散队伍</van-button>
             </template>
         </van-card>

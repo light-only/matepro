@@ -9,7 +9,7 @@
       />
 </form>
     <div class="add-team">
-        <van-button type="primary" @click="toAddTeam" style="width: 100%">主要按钮</van-button>
+        <van-button type="primary" @click="toAddTeam" style="width: 100%">新增队伍</van-button>
     </div>
     <team-card v-if="teamList.length>0" @refreshList="getList" :teamList="teamList"></team-card>
     <van-empty v-else description="暂无数据" />

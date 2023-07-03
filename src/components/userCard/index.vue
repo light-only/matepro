@@ -1,8 +1,7 @@
 <template>
-  <div class="content">
+    <van-skeleton title avatar :row="3" :loading="props.loading" v-for="item in props.userList" :key="item?.id">
+    <div class="content">
     <van-card
-        v-for="item in props.userList"
-        :key="item?.id"
         :desc="item?.profile"
         :title="item?.userName"
         :thumb="item?.avatarUrl"
@@ -15,17 +14,21 @@
       </template>
     </van-card>
   </div>
+</van-skeleton>
 </template>
 
 <script setup lang="ts">
 
-import {defineProps} from "vue";
+import {defineProps,withDefaults} from "vue";
+import {UserType} from "../../models/user";
+interface UserCardListProps {
+    loading:boolean,
+    userList:UserType[]
+}
 
-const props = defineProps({
-  userList:{
-    type:Array,
-    default:[]
-  }
+const props = withDefaults<UserCardListProps>(defineProps<UserCardListProps>(),{
+    userList:[] as UserType[],
+    loading:true
 })
 </script>
 

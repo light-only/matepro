@@ -1,5 +1,5 @@
 <template>
-  <van-nav-bar title="标题"  v-if="isShowTitle">
+  <van-nav-bar :title="title"  v-if="isShowTitle">
     <template #left v-if="isShowArrow">
       <van-icon @click="onClickLeft" name="arrow-left" size="18"/>
     </template>
@@ -19,10 +19,11 @@
 </template>
 
 <script setup lang="ts">
-import {ref, watch} from 'vue';
-import router from "../router";
-import {useRoute} from "vue-router";
+import {onMounted, ref, watch} from 'vue';
+import  {routes} from "../router";
+import {useRoute, useRouter} from "vue-router";
 const route = useRoute();
+const router = useRouter();
 const active = ref(0);
 //控制title的显示
 const isShowTitle = ref(true);
@@ -30,6 +31,10 @@ const isShowTitle = ref(true);
 const isShow = ref(true);
 //控制左侧箭头显示
 const isShowArrow = ref(false);
+const DEFAULT_TITLE = "伙伴匹配";
+//导航栏标题
+const title = ref(DEFAULT_TITLE);
+
 /**
  * 标签栏触发事件
  * @param index
@@ -48,7 +53,6 @@ const searchTeam = ()=>{
  * 点击左侧返回按钮
  */
 const onClickLeft = ()=>{
-  console.log(111)
   history.back();
 }
 
@@ -58,6 +62,7 @@ const navList = ['/index','/team','/user'];
 //不需要显示顶部导航栏的路由地址
 const whiteList = ['/login','/register'];
 watch(() => route.path,newRoute=> {
+
   //不显示底部顶部左侧返回按钮，显示底部导航栏
   if(navList.includes(newRoute)){
     isShow.value = true;

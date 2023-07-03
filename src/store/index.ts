@@ -7,5 +7,5 @@ export const useStore = defineStore('main', {
         return {
             user:{}
         }
-    }
+    },
 })

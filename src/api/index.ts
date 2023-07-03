@@ -45,13 +45,18 @@ export const updateUser = (data)=>{
 /**
  * 获取推荐的用户信息
  */
-export const getRecommendUser = ()=>{
+export const getRecommendUser = (params)=>{
     return myAxios.get('/user/recommend',{
-        params:{
-            pageSize:8,
-            pageNum:1
-        }
+        params
     })
 }
 
-
+/**
+ * @description:获取心动模式下的用户
+ * @param params
+ */
+export const getMayLikeUser = (params)=>{
+    return myAxios.get('/user/matchUser',{
+        params
+    })
+}
