@@ -9,7 +9,7 @@
       />
 </form>
     <div class="add-team">
-        <van-button type="primary" @click="toAddTeam" style="width: 100%">新增队伍</van-button>
+        <van-button type="primary" @click="toAddTeam" style="width: 100%"><van-icon name="plus" />新增队伍</van-button>
     </div>
     <team-card v-if="teamList.length>0" @refreshList="getList" :teamList="teamList"></team-card>
     <van-empty v-else description="暂无数据" />
@@ -69,7 +69,7 @@ const getList = ()=>{
     //获取队伍列表接口数据
     getTeamList(queryParams).then(res=>{
         if(res.code === 0){
-            teamList.value = res.data.records;
+            teamList.value = res.data;
         }else {
             showFailToast('请求失败，请重试')
         }

@@ -19,9 +19,10 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref, watch} from 'vue';
-import  {routes} from "../router";
+import { ref, watch} from 'vue';
+import { useUsersStore } from "@/store/index.ts";
 import {useRoute, useRouter} from "vue-router";
+import {storeToRefs} from "pinia";
 const route = useRoute();
 const router = useRouter();
 const active = ref(0);
@@ -31,10 +32,9 @@ const isShowTitle = ref(true);
 const isShow = ref(true);
 //控制左侧箭头显示
 const isShowArrow = ref(false);
-const DEFAULT_TITLE = "伙伴匹配";
 //导航栏标题
-const title = ref(DEFAULT_TITLE);
-
+const store = useUsersStore();
+const {title} = storeToRefs(store);
 /**
  * 标签栏触发事件
  * @param index

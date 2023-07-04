@@ -39,16 +39,21 @@
 import {ref} from 'vue'
 import {userLogin} from "../api";
 import router from "../router";
-import {useStore} from "../store";
 const userAccount = ref('');
 const userPassword = ref('');
-const state = useStore();
+import { useUsersStore } from "@/store/index.ts";
+import {storeToRefs} from "pinia";
+import {setCurrentUserState} from "../states/user";
+
 const onSubmit = (values) => {
   //调取登录接口
   userLogin({userAccount:userAccount.value,userPassword:userPassword.value}).then(res=>{
     if(res.code === 0){
-      router.replace('/index');
-      state.user = res.data;
+        const store = useUsersStore();
+        const {user} = storeToRefs(store);
+        store.user = res.data;
+        setCurrentUserState(res.data);
+        router.replace('/index');
     }
   })
 };

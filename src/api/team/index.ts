@@ -15,7 +15,7 @@ export const createTeam = (data)=>{
  * @param params
  */
 export const getTeamList = (params)=>{
-    return myAxios.get('/team/list/page',{
+    return myAxios.get('/team/list',{
         params
     })
 }

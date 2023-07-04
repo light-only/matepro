@@ -20,10 +20,8 @@ import {onMounted} from "vue";
 import {getTeamCreate} from "../api/team";
 import {showFailToast,showToast} from "vant";
 import { reactive } from 'vue';
-import {useStore} from "../store";
 import {getLoginUser} from "../services/user";
 
-const store = useStore();
 const teamList = ref([]);
 const value = ref('');
 

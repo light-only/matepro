@@ -1,13 +1,15 @@
 import axios from 'axios';
+import router from "../router";
 const myAxios = axios.create({
     baseURL: 'http://localhost:8082/api'
 } as any);
+
+const whiteList = ['/team/list/page','/user/recommend'];
 
 myAxios.defaults.withCredentials = true;//允许携带cookie
 
 // 添加请求拦截器
 myAxios.interceptors.request.use(function (config) {
-    console.log('我要发送请求了')
     // 在发送请求之前做些什么
     return config;
 }, function (error) {
@@ -17,7 +19,9 @@ myAxios.interceptors.request.use(function (config) {
 
 // 添加响应拦截器
 myAxios.interceptors.response.use(function (response) {
-    console.log('我接收到请求了')
+    if(response?.data?.code === 40100 ){
+        router.push('/login');
+    }
     // 2xx 范围内的状态码都会触发该函数。
     // 对响应数据做点什么
     return response.data;

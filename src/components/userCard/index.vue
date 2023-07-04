@@ -34,6 +34,6 @@ const props = withDefaults<UserCardListProps>(defineProps<UserCardListProps>(),{
 
 <style scoped>
 .content {
-  margin-bottom: 60px;
+  margin-bottom: 10px;
 }
 </style>
