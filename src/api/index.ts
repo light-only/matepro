@@ -60,3 +60,10 @@ export const getMayLikeUser = (params)=>{
         params
     })
 }
+
+/**
+ * @description:退出登录
+ */
+export const layoutUser = ()=>{
+    return myAxios.post('/user/logout')
+}

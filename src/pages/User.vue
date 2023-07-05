@@ -25,6 +25,9 @@
     <van-cell title="我创建的队伍"  is-link  to="/user/team/create"/>
     <van-cell title="我加入的队伍"  is-link to="/user/team/join"/>
   </van-cell-group>
+    <div style="margin: 20px">
+        <van-button style="width: 100%" type="default" @click="layout">退出登录</van-button>
+    </div>
 
 </template>
 
@@ -34,6 +37,8 @@ import router from "../router";
 import {onMounted, ref} from "vue";
 import moment from 'moment'
 import {getLoginUser} from "../services/user";
+import {layoutUser} from "../api";
+import {showFailToast, showSuccessToast} from "vant";
 
 const user = ref({});
 onMounted(async ()=>{
@@ -54,6 +59,21 @@ const toEdit = (editKey:string,name:string,editValue:string,)=>{
       editValue,
     }
   })
+}
+
+/**
+ * @description:退出登录
+ */
+const layout = ()=>{
+    //调用退出接口
+    layoutUser().then(res=>{
+        if(res.code === 0){
+            showSuccessToast("退出成功");
+            router.replace('/login');
+        }else {
+            showFailToast("退出失败，请重试！")
+        }
+    })
 }
 </script>
 

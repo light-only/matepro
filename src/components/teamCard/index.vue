@@ -11,7 +11,7 @@
             </template>
             <template #bottom>
                 <div>
-                    {{ '最大人数: ' + item.maxNum }}
+                    {{ '队伍人数: ' + item.hasJoinNum +'/' + item.maxNum }}
                 </div>
                 <div v-if="item.expireTime">
                     {{ '过期时间: ' + moment(item.expireTime).format("YYYY-MM-DD") }}
@@ -24,7 +24,7 @@
                 <van-button size="mini" v-if="currentUser?.id !== item.userId && !item.hasJoin" @click="joinTeam(item)">加入队伍</van-button>
                 <van-button v-if="currentUser?.id === item.userId" size="mini" @click="doUpdateTeam(item)">更新队伍</van-button>
                 <van-button v-if="item.userId !== currentUser?.id && item.hasJoin == true"  size="mini" @click="doQuitTeam(item)">退出队伍</van-button>
-                <van-button v-if="currentUser?.id === item.userId" size="mini" @click="doCloseTeam(item)">解散队伍</van-button>
+                <van-button type="danger" v-if="currentUser?.id === item.userId" size="mini" @click="doCloseTeam(item)">解散队伍</van-button>
             </template>
         </van-card>
     </div>
@@ -35,11 +35,10 @@
 import {defineEmits, defineProps, onMounted, ref} from "vue";
 import {teamStatusEnum} from "@/constants/team";
 import moment from 'moment'
-import {joinTeams,updateTeam} from "@/api/team";
+import {joinTeams,updateTeam,quitTeam, releaseTeam} from "@/api/team";
 import { showFailToast, showSuccessToast } from "vant";
 import { useRouter } from "vue-router";
 import {getLoginUser} from "../../services/user";
-import {quitTeam} from "../../api/team";
 const router = useRouter();
 const currentUser = ref();
 const emit = defineEmits(['refreshList']);
@@ -57,8 +56,11 @@ onMounted(async ()=>{
  */
 const joinTeam = (val:any)=>{
     const {password,id,status} = val;
+    if(status === 2){
+
+    }
     let  postData;
-    if(status === 3){
+    if(status === 2){
          postData = {
             teamId:id,
             password
@@ -71,6 +73,7 @@ const joinTeam = (val:any)=>{
     joinTeams(postData).then(res=>{
         if(res.code === 0){
             showSuccessToast("加入成功");
+            emit('refreshList');
         }else {
             showFailToast(res.description?res.description:res.message);
         }
@@ -81,7 +84,6 @@ const joinTeam = (val:any)=>{
  * @param val
  */
 const doUpdateTeam = (val:any)=>{
-    console.log(val,'val0000');
     router.push({path:'/team/update',query:{id:val.id}});
 }
 /**
@@ -104,7 +106,13 @@ const doQuitTeam = (val:any)=>{
  * @param val
  */
 const doCloseTeam = (val:any)=>{
-
+    //解散队伍接口
+    releaseTeam(val.id).then(res=>{
+        if(res.code === 0){
+            showSuccessToast("成功解散队伍");
+            emit('refreshList');
+        }
+    })
 }
 </script>
 

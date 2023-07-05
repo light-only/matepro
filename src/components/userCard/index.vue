@@ -4,13 +4,13 @@
     <van-card
         :desc="item?.profile"
         :title="item?.userName"
-        :thumb="item?.avatarUrl"
+        :thumb="item?.avatarUrl?item?.avatarUrl:DEFAULT_AVATAR"
     >
       <template #tags v-if="item.tags">
         <van-tag v-for="(it,index) in JSON.parse(item?.tags)" :key="index" plain type="primary">{{it}}</van-tag>
       </template>
       <template #footer>
-        <van-button size="mini">联系我</van-button>
+        <van-button size="mini" @click="handleClick">联系我</van-button>
       </template>
     </van-card>
   </div>
@@ -25,15 +25,27 @@ interface UserCardListProps {
     loading:boolean,
     userList:UserType[]
 }
+//默认头像
+const DEFAULT_AVATAR = 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png';
 
+//父级组件传递过来的数据
 const props = withDefaults<UserCardListProps>(defineProps<UserCardListProps>(),{
     userList:[] as UserType[],
     loading:true
 })
+/**
+ * 联系我
+ */
+const handleClick = ()=>{
+
+}
 </script>
 
 <style scoped>
 .content {
   margin-bottom: 10px;
+}
+.van-tag--primary.van-tag--plain {
+    margin: 2px 5px 2px 0;
 }
 </style>

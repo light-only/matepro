@@ -9,7 +9,7 @@
                 is-link
                 readonly
                 name="expireTime"
-                label="时间选择"
+                label="过期时间"
                 placeholder="点击选择时间"
                 @click="showPicker = true"
 

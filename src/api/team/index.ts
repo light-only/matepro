@@ -73,3 +73,11 @@ export const getTeamJoin = (params)=>{
 export const quitTeam = (id)=>{
     return myAxios.post('/team/quit?teamId=' + id);
 }
+
+/**
+ * @description:解散队伍
+ * @param id 队伍id
+ */
+export const releaseTeam =(id)=>{
+    return myAxios.post('/team/delete?id=' + id);
+}
