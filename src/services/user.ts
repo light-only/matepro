@@ -7,6 +7,7 @@ import {getCurrentUser} from "../api";
  */
 export const getLoginUser = async () =>{
     const user = getCurrentUserState();
+    console.log(user,'user+++')
     if(user){
         return user;
     }

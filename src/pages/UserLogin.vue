@@ -52,7 +52,7 @@ const onSubmit = (values) => {
         const store = useUsersStore();
         const {user} = storeToRefs(store);
         store.user = res.data;
-        setCurrentUserState(res.data);
+        setCurrentUserState(JSON.stringify(res.data));
         router.replace('/index');
     }
   })

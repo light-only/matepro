@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-
+import { showDialog } from 'vant';
 import {defineProps,withDefaults} from "vue";
 import {UserType} from "../../models/user";
 interface UserCardListProps {
@@ -37,7 +37,11 @@ const props = withDefaults<UserCardListProps>(defineProps<UserCardListProps>(),{
  * 联系我
  */
 const handleClick = ()=>{
-
+    showDialog({
+        message: '此功能暂未开发，有兴趣的话可以联系我的电话：15555555555',
+    }).then(() => {
+        // on close
+    });
 }
 </script>
 

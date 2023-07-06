@@ -14,7 +14,7 @@
     </van-cell>
     <van-cell title="性别" is-link @click="toEdit('gender','性别',user.gender)">
       <template #value>
-        {{ user.gender === 0 ? '男' : '女' }}
+        {{ user.gender == 0 ? '男' : '女' }}
       </template>
 
     </van-cell>
@@ -25,7 +25,7 @@
     <van-cell title="我创建的队伍"  is-link  to="/user/team/create"/>
     <van-cell title="我加入的队伍"  is-link to="/user/team/join"/>
   </van-cell-group>
-    <div style="margin: 20px">
+    <div style="margin: 20px" v-if="user">
         <van-button style="width: 100%" type="default" @click="layout">退出登录</van-button>
     </div>
 
@@ -39,6 +39,7 @@ import moment from 'moment'
 import {getLoginUser} from "../services/user";
 import {layoutUser} from "../api";
 import {showFailToast, showSuccessToast} from "vant";
+import {setCurrentUserState} from "../states/user";
 
 const user = ref({});
 onMounted(async ()=>{
@@ -70,6 +71,7 @@ const layout = ()=>{
         if(res.code === 0){
             showSuccessToast("退出成功");
             router.replace('/login');
+            setCurrentUserState(null);
         }else {
             showFailToast("退出失败，请重试！")
         }

@@ -1,7 +1,7 @@
 <template>
     <van-notice-bar
         left-icon="volume-o"
-        text="本软件只有基本的功能，暂时不能满足使用需要，仅供参考。"
+        text="心动模式下，可以筛选出跟自己标签最接近的用户。"
     />
     <van-cell center title="心动模式" >
         <!-- 使用 right-icon 插槽来自定义右侧图标 -->

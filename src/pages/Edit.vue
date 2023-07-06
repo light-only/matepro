@@ -34,7 +34,7 @@ import {updateUser} from "../api";
 import {getLoginUser} from "../services/user";
 import {showFailToast, showSuccessToast} from "vant";
 import router from "../router";
-import {setCurrentUserState,clearCurrentUserState} from "../states/user";
+import {setCurrentUserState, clearCurrentUserState, getCurrentUserState} from "../states/user";
 const route = useRoute();
 onMounted(()=>{
   if(editUser.value.editKey === 'avatarUrl'){
@@ -55,7 +55,9 @@ const onSubmit = async (values) => {
   const currentUser = await getLoginUser();
   updateUser({id:currentUser.id,[editUser.value.editKey]:editUser.value.editValue}).then(res=>{
     if(res.code === 0){
-      setCurrentUserState(null);
+        let user = getCurrentUserState();
+        let obj = {...user,[editUser.value.editKey]:editUser.value.editValue};
+      setCurrentUserState(JSON.stringify(obj));
       showSuccessToast('修改成功');
       router.replace('/user');
     }else {
