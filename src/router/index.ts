@@ -13,10 +13,12 @@ import TeamAddPage from '../pages/TeamAddPage.vue'
 import TeamUpdatePage from '@/pages/TeamUpdatePage.vue'
 import UserTeamCreate from '@/pages/UserTeamCreate.vue'
 import UserTeamJoin from '@/pages/UserTeamJoin.vue'
+import UserRegister from "@/pages/UserRegister.vue"
 import {useStore} from "../store";
 
 import { useUsersStore } from "@/store/index.ts";
 import {storeToRefs} from "pinia";
+import {createWebHistory} from "vue-router";
 
 // 2. 定义一些路由
 // 每个路由都需要映射到一个组件。
@@ -29,6 +31,7 @@ export const routes = [
     {path:'/edit',component: Edit,title: "修改信息"},
     {path:'/resultList',component: UserResult,title: "搜索结果"},
     {path:'/login',component: UserLogin,title: "登录"},
+    {path:'/register',component: UserRegister,title: "注册"},
     {path:'/team/add',component:TeamAddPage,title: "添加队伍"},
     {path:'/team/update',component:TeamUpdatePage,title: "更新队伍"},
     {path:'/user/team/create',component: UserTeamCreate,title: "我创建的队伍"},

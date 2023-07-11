@@ -20,6 +20,14 @@ export const getSearchUserByTags = (data)=>{
 }
 
 /**
+ * @description:用户注册
+ * @param data
+ */
+export const userRegister = (data)=>{
+    return myAxios.post('/user/register',data)
+}
+
+/**
  * 用户登录接口
  * @param data
  */

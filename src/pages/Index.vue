@@ -35,6 +35,7 @@ const queryParams = reactive({
 const loading = ref(true);
 const scrollHeight = ref(0);
 onMounted(()=>{
+    //监听页面的滚动，触发页面的上划刷新。
     window.addEventListener('scroll',()=>{
         let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
         let targetHeight = document.documentElement.offsetHeight;
@@ -63,7 +64,13 @@ const getDate = ()=>{
         //获取全部用户
         getRecommendUser(queryParams).then(res=>{
             if(res.code === 0){
-                userList.value = userList.value.concat(res.data?.records);
+                //判断是否下拉合并数组。如果大于4个数据就合并，否则直接赋值。
+                if(userList.value.length>4){
+                    userList.value = userList.value.concat(res.data?.records);
+                }else {
+                    userList.value = res.data?.records;
+                }
+
                 loading.value = false;
             }else {
                 showFailToast('请求失败，请重试！');

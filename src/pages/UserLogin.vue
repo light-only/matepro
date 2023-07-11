@@ -23,6 +23,7 @@
               :rules="[{ required: true, message: '请填写密码' }]"
           />
         </van-cell-group>
+          <div class="register-button" @click="handleRegister">还没有账号？点击去注册</div>
         <div style="margin: 16px;">
           <van-button round block type="primary" native-type="submit">
             提交
@@ -45,6 +46,17 @@ import { useUsersStore } from "@/store/index.ts";
 import {storeToRefs} from "pinia";
 import {setCurrentUserState} from "../states/user";
 
+/**
+ * @description:跳转注册页面
+ */
+const handleRegister = ()=>{
+    router.replace('/register');
+}
+
+/**
+ * @description:表单提交
+ * @param values
+ */
 const onSubmit = (values) => {
   //调取登录接口
   userLogin({userAccount:userAccount.value,userPassword:userPassword.value}).then(res=>{
@@ -81,5 +93,11 @@ const onSubmit = (values) => {
   .login-title img {
     height: 20px;
     padding-right: 5px;
+  }
+  .register-button {
+      text-align: right;
+      margin: 10px 20px 0 0;
+      color: blue;
+      font-size: 14px;
   }
 </style>

@@ -1,7 +1,11 @@
 import axios from 'axios';
 import router from "../router";
+
 const myAxios = axios.create({
-    baseURL: 'http://localhost:8082/api'
+    //本地地址
+    // baseURL: 'https://121.40.32.60:8082/api'
+    //测试地址：
+    baseURL: import.meta.env.VITE_APP_BASE_API
 } as any);
 
 const whiteList = ['/team/list/page','/user/recommend'];
