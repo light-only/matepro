@@ -1,10 +1,9 @@
 <template>
-  <user-card :userList="userList"></user-card>
-
+  <user-card v-if="userList.length>0" :userList="userList" :loading="loading"></user-card>
+    <van-empty v-else description="暂无数据" />
 </template>
 
 <script setup lang="ts">
-
 import {useRoute} from "vue-router";
 import {onMounted, ref} from "vue";
 import {getSearchUserByTags} from "../api";
@@ -12,19 +11,25 @@ import {showFailToast} from "vant";
 const route = useRoute();
 const userList = ref([]);
 
-console.log(route.query,'query');
 const {tags} = route.query;
+const loading = ref(true);
 
 onMounted(()=>{
-  getSearchUserByTags(tags).then(res=>{
-    if(res.code == 0){
-      userList.value = res.data;
-    }else {
-      showFailToast('获取数据失败，请重试');
-    }
-
-  })
+   getList();
 })
+
+const getList = ()=>{
+    loading.value = true;
+    getSearchUserByTags(tags).then(res=>{
+        if(res.code == 0){
+            userList.value = res.data;
+            loading.value = false;
+        }else {
+            showFailToast('获取数据失败，请重试');
+        }
+
+    })
+}
 
 const mockUser = {
   id:123,

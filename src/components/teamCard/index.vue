@@ -28,6 +28,10 @@
             </template>
         </van-card>
     </div>
+    <van-dialog v-model:show="showPasswordDialog" title="请输入密码" show-cancel-button @confirm="doJoinTeam" @cancel="doJoinCancel">
+        <van-field v-model="password" placeholder="请输入密码"/>
+    </van-dialog>
+
 </template>
 
 <script setup lang="ts">
@@ -36,11 +40,14 @@ import {defineEmits, defineProps, onMounted, ref} from "vue";
 import {teamStatusEnum} from "@/constants/team";
 import moment from 'moment'
 import {joinTeams,updateTeam,quitTeam, releaseTeam} from "@/api/team";
-import { showFailToast, showSuccessToast } from "vant";
+import {showDialog, showFailToast, showSuccessToast} from "vant";
 import { useRouter } from "vue-router";
 import {getLoginUser} from "../../services/user";
 const router = useRouter();
 const currentUser = ref();
+const showPasswordDialog = ref(false);
+const password = ref('');
+const teamId = ref(0);
 const emit = defineEmits(['refreshList']);
 const props = defineProps({
     teamList:{
@@ -51,25 +58,48 @@ const props = defineProps({
 onMounted(async ()=>{
     currentUser.value = await  getLoginUser();
 })
+
+/**
+ * @description:加密队伍确认密码
+ */
+const doJoinTeam = ()=>{
+    let obj = {
+        password:password.value,
+        teamId:teamId.value
+    }
+    join(obj);
+}
+/**
+ * @description:加密队伍取消确认密码
+ */
+const doJoinCancel = ()=>{
+    showPasswordDialog.value = false;
+    password.value = "";
+}
 /**
  * @description:加入队伍
  */
 const joinTeam = (val:any)=>{
     const {password,id,status} = val;
-    if(status === 2){
-
-    }
+    teamId.value = id;
     let  postData;
+    //status等于2 是加密队伍
     if(status === 2){
-         postData = {
-            teamId:id,
-            password
-        }
+        showPasswordDialog.value = true;
     }else {
         postData = {
             teamId: id
         }
+        join(postData);
     }
+
+}
+/**
+ * @description:封装加入队伍接口
+ * @param postData
+ */
+const join = (postData)=>{
+    //调用加入队伍接口
     joinTeams(postData).then(res=>{
         if(res.code === 0){
             showSuccessToast("加入成功");

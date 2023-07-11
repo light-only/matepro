@@ -78,10 +78,6 @@ const onCancel = () => {
 const toAddTeam = ()=>{
   router.push('/team/add');
 }
-onMounted(()=>{
-    getList();
-})
-
 /**
  * @description:获取队伍列表数据
  */

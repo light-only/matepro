@@ -10,17 +10,29 @@
         </template>
     </van-cell>
 
-    <user-card v-if="userList.length>0" :userList="userList" :loading="loading"></user-card>
-    <van-back-top v-if="userList.length>0" />
-    <van-empty v-else description="暂无数据" />
+    <van-list
+        v-model:loading="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
+    >
+        <user-card v-if="userList.length>0" :userList="userList" :loading="loading"></user-card>
+        <van-back-top v-if="userList.length>0" />
+        <van-empty v-else description="暂无数据" />
+    </van-list>
+
+
+
 </template>
 
 <script setup lang="ts">
 import { NoticeBar } from 'vant';
 import { BackTop } from 'vant';
-import {onMounted, reactive, ref, watch} from "vue";
+import { onMounted, reactive, ref} from "vue";
 import {getMayLikeUser, getRecommendUser} from "../api";
 import {showFailToast} from "vant";
+import {useRoute} from "vue-router";
+const route = useRoute();
 //存放用户列表
 const userList = ref([]);
 //心动状态是否开启
@@ -30,23 +42,20 @@ const queryParams = reactive({
     pageNum:1,
     pageSize:10,
     num:undefined
-})
+});
+const pages = ref(0);
 
 const loading = ref(true);
-const scrollHeight = ref(0);
+const finished = ref(false);
 onMounted(()=>{
-    //监听页面的滚动，触发页面的上划刷新。
-    window.addEventListener('scroll',()=>{
-        let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-        let targetHeight = document.documentElement.offsetHeight;
-        let clientTargetHeight = document.documentElement.clientHeight;
-        if(scrollTop + clientTargetHeight >targetHeight - 80){
-            queryParams.pageNum +=1;
-            getDate(queryParams);
-        }
-    })
     getDate();
 })
+
+const onLoad = () => {
+    queryParams.pageNum +=1;
+    // 异步更新数据
+    getDate();
+};
 /**
  * @description:获取列表用户数据
  */
@@ -64,14 +73,14 @@ const getDate = ()=>{
         //获取全部用户
         getRecommendUser(queryParams).then(res=>{
             if(res.code === 0){
-                //判断是否下拉合并数组。如果大于4个数据就合并，否则直接赋值。
-                if(userList.value.length>4){
-                    userList.value = userList.value.concat(res.data?.records);
-                }else {
-                    userList.value = res.data?.records;
-                }
-
+                pages.value = res.data.pages;
+                userList.value = userList.value.concat(res.data?.records);
                 loading.value = false;
+
+                //加载状态结束
+                if(queryParams.pageNum>pages.value){
+                    finished.value = true;
+                }
             }else {
                 showFailToast('请求失败，请重试！');
             }
